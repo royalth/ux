@@ -1,6 +1,4 @@
 #include "shell.h"
-#include <iostream>
-using namespace std; 
 
 int run_in_pipeline(char** programs[], int program_num, bool background) {
 	if (program_num == 0) {
@@ -53,5 +51,23 @@ int run_in_pipeline(char** programs[], int program_num, bool background) {
 	
 	return 0; 		
 }
+
+int run_with_in_out_redirect(int in_fd, int out_fd, char** programs[], int program_num, bool background) {
+	pid_t child; 
+	if ( (child = fork()) == 0) {
+		dup2(in_fd, 0); 
+		dup2(out_fd, 1); 
+		close(in_fd); 
+		close(out_fd); 
+		
+		return run_in_pipeline(programs, program_num, background); 
+	}
+	
+	int status; 
+	waitpid(child, &status, 0); 
+	
+	return status; 
+}
+
 
 

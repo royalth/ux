@@ -12,6 +12,13 @@ int do_pwd() {
 	return 0; 
 }
 
+int do_cd(char* path) {
+	if ( chdir(path) != 0 ) 
+		return 1; 
+		
+	return 0; 
+}
+
 int do_ls() {
 	char buffer[PATH_MAX]; 
 	if ( getcwd(buffer, MAX_PATH_LENGTH) == NULL) 
@@ -31,11 +38,23 @@ int do_ls() {
 	return 0; 
 }
 
-int do_cd(char* path) {
-	if ( chdir(path) != 0 ) 
-		return 1; 
+int do_ls_path(char* path) {
+	if (strlen(path) == 0) 
+		return do_ls(); 
+
+	pid_t child; 
+	if ( (child = fork()) == 0 ) {
+		int ret = do_cd(path); 
+		if (ret != 0) 
+			return ret; 
 		
-	return 0; 
+		ret = do_ls(); 
+		return ret; 
+	}
+	
+	int status; 
+	waitpid(child, &status, 0); 
+	return status; 
 }
 
 int do_touch(char* pathname) {

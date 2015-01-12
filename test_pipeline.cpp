@@ -17,8 +17,20 @@ int main() {
 		
 		p[c][2] = NULL;
 	}
+	
+	cout << "przekierowanie: stdin -> program0 -> program1 -> ... -> program4 -> stdout" << endl; 
 		
 	run_in_pipeline(p, 5, false); 
+
+	cout << endl << "a teraz z przekierowaniem deskryptorów typu >, <" << endl; 
+	cout << "testutils/test.in -> program0 -> ... -> program4 -> testutils/test.out"  << endl; 
+	
+	FILE *in, *out; 
+	in = fopen("testutils/test.in", "r"); 
+	out = fopen("testutils/test.out", "w+"); 
+	
+	run_with_in_out_redirect(fileno(in), fileno(out), p, 5, false); 
+	
 
 	return 0; 
 }
