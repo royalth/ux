@@ -17,7 +17,7 @@ int main() {
 		
 		p[c][2] = NULL;
 	}
-	
+
 	cout << "przekierowanie: stdin -> program0 -> program1 -> ... -> program4 -> stdout" << endl; 
 		
 	run_in_pipeline(p, 5, false); 
@@ -30,7 +30,14 @@ int main() {
 	out = fopen("testutils/test.out", "w+"); 
 	
 	run_with_in_out_redirect(fileno(in), fileno(out), p, 5, false); 
+
+	cout << "przekierowanie tak, że dostajemy wyjście programów jako cstring (dla zaprezentowania odwracam go)" << endl; 	
 	
+	char* result = run_and_get_output(p, 5); 
+	for (int i = strlen(result)-1; i >= 0; --i) {
+		cout << result[i]; 
+	}
+	cout << endl; /**/
 
 	return 0; 
 }

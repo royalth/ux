@@ -9,6 +9,9 @@ int main(int argc, char* argv[]) {
 	
 	string s;
 	cin >> s; 
+	
+	//cerr << "id: " << argv[1] << ", otrzymauem " << s << ", przesyuam " << s << "_" << argv[1] << endl; 
+	
 	cout << s << "_" << argv[1]; 
 	
 	return 0; 

@@ -78,7 +78,7 @@ int run_child_shell(char* line, bool background) {
 		
 		run_in_pipeline(p, 1, background); 
 		
-		return 1;
+		exit(1);
 	}
 	
 	int status = 0; 
@@ -90,7 +90,6 @@ int run_child_shell(char* line, bool background) {
 		
 	return status; 
 }
-
 
 
 

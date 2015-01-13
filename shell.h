@@ -20,3 +20,4 @@ int write_to_file(char*, char*);
 
 int run_in_pipeline(char***, int, bool); 
 int run_with_in_out_redirect(int, int, char***, int, bool);
+char* run_and_get_output(char***, int);

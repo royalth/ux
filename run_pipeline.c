@@ -55,18 +55,48 @@ int run_in_pipeline(char** programs[], int program_num, bool background) {
 int run_with_in_out_redirect(int in_fd, int out_fd, char** programs[], int program_num, bool background) {
 	pid_t child; 
 	if ( (child = fork()) == 0) {
-		dup2(in_fd, 0); 
-		dup2(out_fd, 1); 
-		close(in_fd); 
-		close(out_fd); 
+		if (in_fd != 0) {
+			dup2(in_fd, 0); 
+			close(in_fd); 
+		}
 		
-		return run_in_pipeline(programs, program_num, background); 
+		if (out_fd != 1) {
+			dup2(out_fd, 1); 
+			close(out_fd); 
+		}
+		
+		int res = run_in_pipeline(programs, program_num, background); 
+		exit(res); 
 	}
 	
 	int status; 
 	waitpid(child, &status, 0); 
 	
 	return status; 
+}
+
+
+char* run_and_get_output(char** programs[], int program_num) {
+	int fd[2]; 
+	pipe(fd); 
+
+	pid_t child; 
+	if ( (child = fork()) == 0) {
+		int res = run_with_in_out_redirect(0, fd[1], programs, program_num, false);
+		exit(res); 
+	}
+	
+	int status; 
+	waitpid(child, &status, 0); 
+
+	int buff_size = 10000; 	
+	char* buffer = (char*)malloc(buff_size*sizeof(char)); 
+	int num; 
+	if ( (num = read(fd[0], buffer, buff_size-1)) < 0 ) {
+		perror("buffer read"); 
+	}
+	
+	return buffer; 
 }
 
 
