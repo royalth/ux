@@ -18,6 +18,10 @@ int do_touch(char*);
 int read_from_file(char*); 
 int write_to_file(char*, char*); 
 
-int run_in_pipeline(char***, int, bool); 
-int run_with_in_out_redirect(int, int, char***, int, bool);
-char* run_and_get_output(char***, int);
+int run_in_pipeline(char***, int, bool); 							// proga arg1 | prog2 arg1 arg2 | prog3 | prog4
+int run_with_in_out_redirect(int, int, char***, int, bool);	// proga < in.in > out.out
+char* run_and_get_output(char***, int);							// proga `progb` - ta funkcja uzyskuje to co podstawiamy zamiast progb
+int run_child_shell(char*, bool, int);								// wywołanie danej linii w podshellu: ( linia )
+
+
+

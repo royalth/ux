@@ -99,5 +99,46 @@ char* run_and_get_output(char** programs[], int program_num) {
 	return buffer; 
 }
 
+int run_child_shell(char* line, bool background, int parent_shell_id) {
+	int fd[2];
+	if (pipe(fd) != 0) {
+		perror("pipe"); 
+	}
+
+	if ( write(fd[1], line, strlen(line)) < 1 )  {
+		perror("write"); 
+		return 1; 
+	}
+	
+	pid_t child; 
+	if ( (child = fork()) == 0 ) {
+		dup2(fd[0], 0); 
+		close(fd[0]); 
+		close(fd[1]); 
+		
+		char** p[1];
+		p[0] = (char**) malloc(sizeof(char*) * 4); 
+		p[0][0] = (char*) malloc(sizeof(char) * 10); 
+		strcpy( p[0][0], "shell" ); 
+		p[0][1] = (char*) malloc(sizeof(char) * 10);
+		sprintf(p[0][1], "%d", parent_shell_id + 1);
+		p[0][2] = (char*) malloc(sizeof(char) * strlen(line)); 
+		strcpy(p[0][2], line); 
+		p[0][3] = NULL; 
+		
+		run_in_pipeline(p, 1, background); 
+		
+		exit(1);
+	}
+	
+	int status = 0; 
+	if (!background) 
+		waitpid(child, &status, 0); 
+	
+	close(fd[0]); 
+	close(fd[1]);  
+		
+	return status; 
+}
 
 
