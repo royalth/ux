@@ -80,6 +80,8 @@ int run_with_in_out_redirect(int in_fd, int out_fd, char** programs[], int progr
 
 
 char* run_and_get_output(char** programs[], int program_num) {
+	if (programs == NULL || program_num == 0) return NULL; 
+	
 	int fd[2]; 
 	pipe(fd); 
 

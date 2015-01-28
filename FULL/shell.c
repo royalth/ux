@@ -32,6 +32,16 @@ int main(int argc, char* argv[]) {
 	return 0; 
 }
 
+/*
+	TODO:
+	-> cd nie działa, bo jest w osobnym procesie
+	-> podłączyć przekierowania
+	-> podłączyć subshell
+	-> help? exit? echo?
+
+*/
+
+
 int handle_line(char* line) {
 	command_line* parsed = parse_command_line(line);
 	if (parsed == NULL) {
