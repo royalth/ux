@@ -1,5 +1,4 @@
 %{
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -7,7 +6,14 @@
 #include <stdbool.h>
 #include "parser.h"
 
-command_invocation_part* create_invocation_part();
+char *strdup(const char *s);
+
+command_invocation_part* create_invocation_part(enum argument_type type);
+redirect* create_redirect(enum redirect_direction direction, int redirected_fd, char* destination_path);
+subshell* create_subshell(command_line* child_command_line);
+command_segment* create_command_segment(enum command_segment_type type);
+command_line* create_command_line(bool run_in_background, command_segment* first_command_segment);
+void append_command_segment(command_segment* destination, command_segment* element);
 void append_command_invocation_part(command_invocation_part* destination, command_invocation_part* element);
 
 %}
@@ -143,10 +149,12 @@ single_quoted_string:
 	;
 
 %%
-
-int yyparse(command_line** command_line_output, yyscan_t scanner);
 typedef struct yy_buffer_state * YY_BUFFER_STATE;
-extern YY_BUFFER_STATE yy_scan_string(char* str, yyscan_t scanner);
+YY_BUFFER_STATE yy_scan_string(char* str, yyscan_t scanner);
+int yyparse(command_line** command_line_output, yyscan_t scanner);
+void yy_delete_buffer ( YY_BUFFER_STATE buffer, yyscan_t scanner);
+int yylex_destroy ( yyscan_t yyscanner ) ;
+int yylex_init ( yyscan_t * ptr_yy_globals ) ;
 
 command_line* parse_command_line(char* command_line_input) {
 	yyscan_t scanner;

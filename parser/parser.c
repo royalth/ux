@@ -1,9 +1,9 @@
 #include <stdbool.h>
+#include <stdlib.h>
 #include <stddef.h>
 #include "parser.h"
 
 command_invocation_part* create_invocation_part(enum argument_type type) {
-	printf("create_invocation_part\n");
 	command_invocation_part* created_part = malloc(sizeof(command_invocation_part));
 	created_part->next = NULL;
 	created_part->type = type;
@@ -47,10 +47,8 @@ void append_command_segment(command_segment* destination, command_segment* eleme
 }
 
 void append_command_invocation_part(command_invocation_part* destination, command_invocation_part* element) {
-	// First, find the end of the list:
 	while(destination->next != NULL) {
 		destination = destination->next;
 	}
-	// Append the element as the last element - the final destination's "next".
 	destination->next = element;
 }

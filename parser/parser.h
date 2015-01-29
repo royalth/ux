@@ -39,8 +39,6 @@ typedef struct command_segment {
 	} data;
 } command_segment;
 
-
-
 /*
  * A Sub-shell holds the information about the complete command-line to call in a forked copy of ourselves, as well as redirections from/to the child shell process. 
  */
@@ -50,14 +48,6 @@ struct subshell {
 	// Note that we assume every command invocation part must be of type ARGUMENT_REDIRECTION in this list.
 	command_invocation_part* first_redirect;
 };
-
-/*
- * A command substitution (such as `this`) is much like a sub-shell, but it does not allow external specification of redirects.
- * This means that, when calling "echo `date` >date.txt a b c", the redirect belongs to the top-level command_segment and is not associated with the substitution.
- */
-// typedef struct command_substitution {
-// 	
-// };
 
 /*
  * A Command Line represents a sequence of piped command invocations or subshells. Each element of the linked list shall be piped from left to right.

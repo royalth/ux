@@ -1,5 +1,9 @@
 %{
+#include "parser.h"
 #include "command_line.tab.h"
+
+char *strdup(const char *s);
+int fileno(FILE *stream);  
 %}
 
 %option reentrant
